@@ -72,6 +72,32 @@ namespace ConsoleApp1
 
             Console.WriteLine($"{result8 * 2} óra volt");
 
+            int osszVillam = villamlasok
+                .Where((v, index) => index < 20)
+                .Sum(v => v.Orak.Sum());
+
+            Console.WriteLine($"Augusztus 1-től 20-ig összesen {osszVillam} villámlást regisztrált a mérőállomás.");
+
+
+            var legkevesebbVillamOra = villamlasok
+                .SelectMany(v => v.Orak.Select((num, index) => new { Hour = index, Villamok = num }))
+                .GroupBy(x => x.Hour)
+                .OrderBy(group => group.Sum(x => x.Villamok))
+                .First();
+
+            int legkevesebbVillamSzam = legkevesebbVillamOra.Sum(x => x.Villamok);
+
+            Console.WriteLine($"A hónapban a legkevesebb villámlás {legkevesebbVillamSzam} volt az {(legkevesebbVillamOra.Key + 1)}. órában.");
+
+            Villamlas hetedikNap = villamlasok[6];
+
+            int result11 = hetedikNap.Orak.Max();
+            int result11Ora = hetedikNap.Orak.IndexOf(result11);
+
+            Console.WriteLine($"A(z) 7. napon a legtöbb villám a(z) {result11Ora}. órában volt: {result11} villám.");
+
+
+            Console.ReadLine();
         }
 
     }
